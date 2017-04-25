@@ -3,18 +3,17 @@ package sample;
 
 
 
-import java.util.*;
 import javax.mail.*;
-import javax.mail.internet.*;
-import javax.activation.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import java.util.Properties;
 
 
 public class MailLogger implements Logger{
 
 
-
     private final String username = "javamaillogger@gmail.com";
-    private final String password = "javamaillogger";
+    private final String password = "javamail";
     private final String recipient = "adamdobr17@gmail.com";
 
     /*public MailLogger(String userName, String password, String recipient) {
@@ -35,6 +34,7 @@ public class MailLogger implements Logger{
 
     @Override
     public void log(String status, Student student) {
+
         String subject = "Crawler - change: " + status;
         String msg = status + ":" + student.toString();
         Properties properties = new Properties();
@@ -58,7 +58,7 @@ public class MailLogger implements Logger{
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
             message.setSubject(subject);
 
-            message.setText("");
+            message.setText("System.out.println(\"Dziala!\");");
             if (student != null) {
                 message.setText(student.toString());
             }
@@ -68,6 +68,7 @@ public class MailLogger implements Logger{
             e.printStackTrace();
             System.out.println("MailLogger Error");
         }
+
     }
 
 }

@@ -1,8 +1,6 @@
 package sample;
 
 
-import org.apache.commons.io.FileUtils;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -19,10 +17,13 @@ import static sample.SorterOfStudents.*;
 
 public class Crawler  {
 
+
+
     private final Logger[] loggers =new Logger[]
             {
                     new ConsoleLogger(),
-                    new MailLogger()
+                   // new GUILogger(new LogTab())
+
             };
 
     List<Student>currentStudents;
@@ -52,6 +53,7 @@ public class Crawler  {
      MAX,
      MIN;
  }
+
     public Crawler() throws MalformedURLException {
 
         directoryFile ="C:\\Users\\Adam\\IdeaProjects\\Crawler\\students.txt";
@@ -127,10 +129,10 @@ public class Crawler  {
         while(true)
         {
             String adressDirectory =this.getDirectoryFile();
-            if(adressDirectory == null) throw new CrawlerException();
-            File file = new File(directoryFile + toString().valueOf(iteration));
-            FileUtils.copyURLToFile(url, file);
-
+            //if(adressDirectory == null) throw new CrawlerException();
+           // File file = new File(directoryFile + toString().valueOf(iteration));
+           // FileUtils.copyURLToFile(url, file);
+            File file = new File(adressDirectory);
             newStudents =new ArrayList<>();
             newStudents = StudentsParser.parse(file);
 
@@ -140,9 +142,14 @@ public class Crawler  {
                     for (Logger el : loggers) {
                         for (Student stud : newStudents) {
                             el.log("ADDED: ", stud);
+
+
+
                         }
                     }
-
+                System.out.println("\nAge:<"+extractAge(MIN,newStudents)+","+extractAge(MAX,newStudents)+">\n");
+               // System.out.println("\nMark:<"+extractMark(MIN,newStudents)+","+extractMark(MAX,newStudents)+">\n");
+                extractStudents(newStudents,OrderMode.MARK);
             }
             else if(currentStudents.size() > newStudents.size()) {
                 if (newStudents == null) {
@@ -156,8 +163,8 @@ public class Crawler  {
                 }
                 else {
                     Student student;
-                    List<Student>upToDate = new ArrayList<>(newStudents);
-                    upToDate.removeAll(currentStudents);
+                    List<Student>upToDate = new ArrayList<>(currentStudents);
+                    upToDate.removeAll(newStudents);
                     ListIterator<Student> studentIterator = upToDate.listIterator();
                     do {
                         student = studentIterator.next();
@@ -203,8 +210,9 @@ public class Crawler  {
             currentStudents = newStudents;
 
 
-            Thread.sleep(10000);
+            Thread.sleep(2000);
             iteration++;
+            break;
         }
 
     }
